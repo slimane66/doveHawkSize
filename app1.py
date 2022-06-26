@@ -14,9 +14,9 @@ import pandas as pd
 #import matplotlib.pyplot as plt
 #from matplotlib import cm
 #from matplotlib.ticker import LinearLocator, FormatStrFormatter
-from scipy.integrate import odeint
-from scipy.integrate import ode
-import seaborn as sns
+#from scipy.integrate import odeint
+#from scipy.integrate import ode
+#import seaborn as sns
 
 
 #alt.renderers.set_embed_options(scaleFactor=2)
