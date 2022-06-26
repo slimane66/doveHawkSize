@@ -5,4 +5,4 @@ pandas==1.2.5
 scipy
 click==8
 matplotlib
-math
+
