@@ -6,7 +6,7 @@ import pandas as pd
 
 pip install  mpl_toolkits
 
-import mpl_toolkits
+
 
 
 from mpl_toolkits.mplot3d import Axes3D
