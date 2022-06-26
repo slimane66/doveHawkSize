@@ -4,6 +4,8 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 
+pip install  mpl_toolkits
+
 import mpl_toolkits
 
 
