@@ -223,7 +223,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="auto",
 )
-icon = Image.open("./utils/logo_bims.png")
+#icon = Image.open("./utils/logo_bims.png")
 
 #st.set_page_config(layout="wide")  # this needs to be the first Streamlit command called
 
