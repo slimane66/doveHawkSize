@@ -500,7 +500,7 @@ if st.button('Run The Model'):
     cbar = fig1.colorbar(CS)
     #cbar.ax2.set_ylabel(r"$H(t,s)$",fontsize=12)
     # Add the contour line levels to the colorbar
-    cbar.add_lines(CS)
+    #cbar.add_lines(CS)
     
     #plt.savefig('DH3D'+outName+'.pdf', transparent=True)
     st.pyplot(fig1)
