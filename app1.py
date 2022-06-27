@@ -294,7 +294,8 @@ with column2:
         
         fig.colorbar(surf, shrink=0.5, aspect=5)
         ax.view_init(10,10)
-        st.pyplot(fig)
+        st.pyplot(fig,clear_figure=False)
+)
         
         #######################
         # Fig 2D
