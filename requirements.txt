@@ -1,7 +1,7 @@
-streamlit==1.6
-numpy==1.19.5
-altair==4.1.0
-pandas==1.2.5
+streamlit
+numpy
+altair
+pandas
 scipy
 click==8
 matplotlib
