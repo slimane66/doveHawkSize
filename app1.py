@@ -221,11 +221,11 @@ y0=[float(Hk(s=s)) for s in si]
 APP_TITLE = "Dove-Hawk size dependend"
 st.set_page_config(
     page_title=APP_TITLE,
-    #page_icon=Image.open("./utils/logo_bims.png"),
+   # page_icon=Image.open("./utils/logo_bims.png"),
     layout="wide",
     initial_sidebar_state="auto",
 )
-#icon = Image.open("./utils/logo_bims.png")
+# icon = Image.open("./utils/logo_bims.png")
 
 #st.set_page_config(layout="wide")  # this needs to be the first Streamlit command called
 
@@ -488,7 +488,7 @@ if st.button('Run The Model'):
     # ###################################
     
     fig1, ax2 = plt.subplots()
-    CS = ax2.contourf(S, T, res1,10,vmin=0, vmax=1)#, 10, cmap=plt.cm.bone)
+    CS = ax2.pcolor(S, T, res1,10,vmin=0, vmax=1)#, 10, cmap=plt.cm.bone)
     
     #CS2 = ax2.contour(CS, levels=CS.levels[::2], colors='r')
     
@@ -497,12 +497,12 @@ if st.button('Run The Model'):
     
     
     # Make a colorbar for the ContourSet returned by the contourf call.
-    cbar = fig1.colorbar(CS)
+    fig1.colorbar(CS, shrink=0.5, aspect=5)
     #cbar.ax2.set_ylabel(r"$H(t,s)$",fontsize=12)
     # Add the contour line levels to the colorbar
     #cbar.add_lines(CS)
     
-  
+    #plt.savefig('DH3D'+outName+'.pdf', transparent=True)
     st.pyplot(fig1)
     
     
@@ -584,24 +584,23 @@ if st.button('Run r-effect (distance to random)'):
     ###################################
     
     fig1, ax2 = plt.subplots()
-    CS = ax2.pcolor(S, T, res1,10,vmin=0, vmax=1)#, 10, cmap=plt.cm.bone)
+    CS = ax2.pcolor(S, T, res2,vmin=0,vmax=1,cmap=cm.coolwarm)#, 10, cmap=plt.cm.bone)
     
     #CS2 = ax2.contour(CS, levels=CS.levels[::2], colors='r')
     
     plt.xlabel('s',fontsize=12)
-    plt.ylabel('time',fontsize=12)
+    plt.ylabel('r',fontsize=12)
     
-    
+    plt.colorbar()
+    #plt.clim(0,1) 
     # Make a colorbar for the ContourSet returned by the contourf call.
-    fig1.colorbar(CS, shrink=0.5, aspect=5)
-    #cbar.ax2.set_ylabel(r"$H(t,s)$",fontsize=12)
+    #cbar = fig1.colorbar(CS)
+    #cbar.ax.set_ylabel(r"$H(t,s)$",fontsize=12)
+    
     # Add the contour line levels to the colorbar
     #cbar.add_lines(CS)
     
-
     st.pyplot(fig1)
-
-
 
 
 
