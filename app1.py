@@ -502,7 +502,7 @@ if st.button('Run The Model'):
     # Add the contour line levels to the colorbar
     #cbar.add_lines(CS)
     
-    #plt.savefig('DH3D'+outName+'.pdf', transparent=True)
+  
     st.pyplot(fig1)
     
     
@@ -584,20 +584,21 @@ if st.button('Run r-effect (distance to random)'):
     ###################################
     
     fig1, ax2 = plt.subplots()
-    CS = ax2.contourf(S, T, res2)#, 10, cmap=plt.cm.bone)
+    CS = ax2.pcolor(S, T, res1,10,vmin=0, vmax=1)#, 10, cmap=plt.cm.bone)
     
     #CS2 = ax2.contour(CS, levels=CS.levels[::2], colors='r')
     
     plt.xlabel('s',fontsize=12)
-    plt.ylabel('r',fontsize=12)
+    plt.ylabel('time',fontsize=12)
+    
     
     # Make a colorbar for the ContourSet returned by the contourf call.
-    cbar = fig1.colorbar(CS)
-    cbar.ax.set_ylabel(r"$H(t,s)$",fontsize=12)
-    
+    fig1.colorbar(CS, shrink=0.5, aspect=5)
+    #cbar.ax2.set_ylabel(r"$H(t,s)$",fontsize=12)
     # Add the contour line levels to the colorbar
     #cbar.add_lines(CS)
     
+
     st.pyplot(fig1)
 
 
