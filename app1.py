@@ -16,6 +16,8 @@ from scipy.integrate import ode
 
 from PIL import Image
 
+#alt.renderers.set_embed_options(scaleFactor=2)
+
 
 smin=0 
 smax=1
@@ -212,8 +214,6 @@ y0=[float(Hk(s=s)) for s in si]
 
 
 ################################"
-################################"
-################################"
 ## Interface
 ## Basic setup and app layout
 
@@ -221,11 +221,11 @@ y0=[float(Hk(s=s)) for s in si]
 APP_TITLE = "Dove-Hawk size dependend"
 st.set_page_config(
     page_title=APP_TITLE,
-    #page_icon=Image.open("./utils/logo_bims.png"),
-    layout="centered",
+    page_icon=Image.open("./utils/logo_bims.png"),
+    layout="wide",
     initial_sidebar_state="auto",
 )
-#icon = Image.open("./utils/logo_bims.png")
+icon = Image.open("./utils/logo_bims.png")
 
 #st.set_page_config(layout="wide")  # this needs to be the first Streamlit command called
 
@@ -290,7 +290,7 @@ with column2:
         fig = plt.figure(figsize=(10,10))
                 #surface_plot without colorbar FIG 1
         ax = fig.add_subplot(111, projection='3d')
-        surf = ax.plot_surface(S1, S2, hawk.Q(si), cmap=cm.coolwarm,linewidth=0, antialiased=False)
+        surf = ax.plot_surface(S1, S2, hawk.Q(si), cmap=plt.cm.bone,linewidth=0, antialiased=False)
         
         fig.colorbar(surf, shrink=0.5, aspect=5)
         ax.view_init(10,10)
@@ -302,7 +302,7 @@ with column2:
         CS = ax2.contourf(S1, S2, hawk.Q(si), 10, cmap=plt.cm.bone)
         
         CS2 = ax2.contour(CS, levels=CS.levels[::2], colors='r')   
-        cbar = fig1.colorbar(CS)
+        cbar = fig1.colorbar(CS, shrink=0.5, aspect=5)
         cbar.ax.set_ylabel('Prob. to win')
         # Add the contour line levels to the colorbar
         cbar.add_lines(CS2)
@@ -363,7 +363,7 @@ with column4:
 
         fig1, ax2 = plt.subplots()
         CS = ax2.contourf(S1, S2, hawk.C(si), 10, cmap=plt.cm.bone)
-        cbar = fig1.colorbar(CS)
+        cbar = fig1.colorbar(CS,shrink=0.5, aspect=5)
         cbar.ax.set_ylabel('competition cost')
         st.pyplot(fig1)
 #######################
@@ -440,6 +440,10 @@ if st.button('Run The Model'):
             timeSet.append(sol.t+dt)
             res1.append(ss)
     
+    res1=np.array(res1)
+    res1[res1<0]=0
+    res1[res1>1]=1
+    
     res1=np.transpose(np.array(res1))
     d = {'Dove & Hawak at t = t_max' : pd.Series(res1[:,-1])}
     # creates Dataframe.
@@ -464,18 +468,18 @@ if st.button('Run The Model'):
     fig = plt.figure()
     #surface_plot without colorbar FIG 1
     ax = fig.add_subplot(111, projection='3d')
-    
-    
-    
-    surf = ax.plot_surface(S, T, res1, cmap=cm.coolwarm,linewidth=0, antialiased=False)
+    surf = ax.plot_surface(S, T, res1, cmap=cm.coolwarm,linewidth=0, antialiased=False,vmin=0, vmax=1)
     
     #plt.title('hawk Population Density')
     plt.xlabel(' s')
     plt.ylabel(' t')
-    # normalize 0..1
+    ax.set_zlim(0,1)
     #fig.colorbar(surf, shrink=0.5, aspect=5)
     ax.view_init(70,10)
-    
+    #fig.clim(0,1)
+    fig.colorbar(surf, shrink=0.5, aspect=5)
+     
+        
     st.pyplot(fig)
     # #x.set_title(r'\TeX\ is Number $\displaystyle\sum_{n=1}^\infty'
     # #            r'\frac{-e^{i\pi}}{2^n}$!', fontsize=16, color='r')
@@ -484,16 +488,17 @@ if st.button('Run The Model'):
     # ###################################
     
     fig1, ax2 = plt.subplots()
-    CS = ax2.contourf(S, T, res1)#, 10, cmap=plt.cm.bone)
+    CS = ax2.contourf(S, T, res1,10,vmin=0, vmax=1)#, 10, cmap=plt.cm.bone)
     
     #CS2 = ax2.contour(CS, levels=CS.levels[::2], colors='r')
     
     plt.xlabel('s',fontsize=12)
     plt.ylabel('time',fontsize=12)
     
+    
     # Make a colorbar for the ContourSet returned by the contourf call.
     cbar = fig1.colorbar(CS)
-    cbar.ax.set_ylabel(r"$H(t,s)$",fontsize=12)
+    #cbar.ax2.set_ylabel(r"$H(t,s)$",fontsize=12)
     # Add the contour line levels to the colorbar
     #cbar.add_lines(CS)
     
@@ -594,6 +599,12 @@ if st.button('Run r-effect (distance to random)'):
     #cbar.add_lines(CS)
     
     st.pyplot(fig1)
+
+
+
+
+
+
 
 
 
