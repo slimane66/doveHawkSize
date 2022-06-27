@@ -14,7 +14,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from scipy.integrate import odeint
 from scipy.integrate import ode
 
-from PIL import Image
+# from PIL import Image
 
 #alt.renderers.set_embed_options(scaleFactor=2)
 
