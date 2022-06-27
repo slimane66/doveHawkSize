@@ -219,7 +219,7 @@ y0=[float(Hk(s=s)) for s in si]
 APP_TITLE = "Dove-Hawk size dependend"
 st.set_page_config(
     page_title=APP_TITLE,
-    page_icon=Image.open("./utils/logo_bims.png"),
+    #page_icon=Image.open("./utils/logo_bims.png"),
     layout="centered",
     initial_sidebar_state="auto",
 )
