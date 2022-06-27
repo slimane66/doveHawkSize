@@ -2,12 +2,9 @@ import altair as alt
 import streamlit as st
 
 import numpy as np
-import pandas as pd
 
 
-
-#import mpl_toolkits
-
+import mpl_toolkits
 
 
 from mpl_toolkits.mplot3d import Axes3D
@@ -16,7 +13,7 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from scipy.integrate import odeint
 from scipy.integrate import ode
-#import seaborn as sns
+
 
 
 #alt.renderers.set_embed_options(scaleFactor=2)
@@ -220,18 +217,33 @@ def sizeDistribution6(si):
 st.set_page_config(layout="wide")  # this needs to be the first Streamlit command called
 st.title("BioMathematics Modelling")
 
-column1, column2, column3, column4, column5 = st.columns(5)
-
+column1, column2,  column4, column5 = st.columns(4)
 with column1:
+    r_max_input = st.number_input(
+        "Resoource max",
+        min_value=0.0,
+        max_value=None,
+        value=0.4,
+        step=0.01,
+        help="This case is to introduce yor ** R_max ** parameter's value",
+    )
+
+    r_input = st.number_input(
+        "distance to non-random",
+        min_value=0.0,
+        max_value=1.,
+        value=0.,
+        step=0.01,
+        help="This case is to introduce yor ** r ** parameter's value",
+    )
+
+
+with column2:
+    st.write("**Probability to win:**")
     q_input = st.radio(
      "Select the probability  Type that you will use ",
      ('cst', 'incresing', 'decresing'))
-    if q_input == 'cst':
-        st.write('You selected ** cst **.')
-    elif q_input == 'incr':
-        st.write("You selected ** incr **.")
-    else :
-        st.write("You selected ** decr **.")
+    
 
 
     q_gam_input = st.number_input(
@@ -251,27 +263,9 @@ with column1:
         help="This case is to introduce yor ** q_max ** parameter's value",
     )
     
-with column2:
-    r_max_input = st.number_input(
-        "Resoource max",
-        min_value=0.0,
-        max_value=None,
-        value=0.4,
-        step=0.01,
-        help="This case is to introduce yor ** R_max ** parameter's value",
-    )
-
-with column3:
-    r_input = st.number_input(
-        "distance to non-random",
-        min_value=0.0,
-        max_value=1.,
-        value=0.,
-        step=0.01,
-        help="This case is to introduce yor ** r ** parameter's value",
-    )
     
 with column4: 
+    st.write("**Cost when loosing:**")
     comp_max_input = st.number_input(
         "competition max",
         min_value=0.0,
@@ -300,6 +294,7 @@ with column4:
         compType='asym'
 
 with column5:
+    st.write("**Size distribution:**")
     sizeDistribution_input = st.radio(
      "Select the compType that you will use ",
      ('1: exp', '2: )', '3: (', '4: increasing', '5: decreasing', '6: constant'),index=0)
@@ -318,64 +313,213 @@ with column5:
 
 
 #
+def space(num_lines=1):
+    """Adds empty lines to the Streamlit app."""
+    for _ in range(num_lines):
+        st.write("")
+        
+space(1)
 
-
-if st.button('Run The Model'):  
+column1, column2 = st.columns(2)
+with column1:
+    if st.button('Run The Model'):  
     
 
     ###############################
-    hawk=Hawk()
-    r= r_input
-    hawk.Rmax=r_max_input
-    #probability to win parameters
-    hawk.QType=q_input
-    hawk.q_gam=q_gam_input
-    hawk.q_max=q_max_input
-    #Competition parameters
-    hawk.compType=compType
-    hawk.comp_max=comp_max_input
-    hawk.comp_gam=comp_gam_input
-    #size distribution 
-   # sizeDistribution_list =[sizeDistribution1,sizeDistribution2, sizeDistribution3, sizeDistribution4, sizeDistribution5, sizeDistribution6]
-    #sizeDistribution=sizeDistribution6
-    #sizeDistribution_list[int(sizeDistribution_input[-1])-1]
-    #1: exp increasing, 2: ), 3:(, 4:increasing, 5: decreasing, 6: cst
-    
-    param=(si,hawk,r,sizeDistribution(si)) 
-
-
-    sol = ode(func3).set_integrator('lsoda',rtol=0.01)
-    sol.set_initial_value(y0,0).set_f_params(param) #param: doit etre un tableau
-    #sol=odeint(func, y0, temps, args=param) 
-    
-    #res=sol.integrate(10)
-    
-    res1=[] # tableau des resultats
-    timeSet=[] # tableau des temps 
-    while sol.successful() and sol.t < tmax:
-        ss=sol.integrate(sol.t+dt)
-        if sol.t>tmax-365:
-            timeSet.append(sol.t+dt)
-            res1.append(ss)
-    
-    res1=np.transpose(np.array(res1))
-    d = {'Dove & Hawak at t = t_max' : pd.Series(res1[:,-1])}
-    # creates Dataframe.
-    df = pd.DataFrame(d)
-    
-    #-----------------------------------------------------------------------------#
-    #----------------------------         plot          --------------------------#
-    #-----------------------------------------------------------------------------#
-    
-    #st.line_chart(df)
-    st.line_chart(df[df.columns[0]])
-   
-    
-   
+        hawk=Hawk()
+        r= r_input
+        hawk.Rmax=r_max_input
+        #probability to win parameters
+        hawk.QType=q_input
+        hawk.q_gam=q_gam_input
+        hawk.q_max=q_max_input
+        #Competition parameters
+        hawk.compType=compType
+        hawk.comp_max=comp_max_input
+        hawk.comp_gam=comp_gam_input
+        #size distribution 
+       # sizeDistribution_list =[sizeDistribution1,sizeDistribution2, sizeDistribution3, sizeDistribution4, sizeDistribution5, sizeDistribution6]
+        #sizeDistribution=sizeDistribution6
+        #sizeDistribution_list[int(sizeDistribution_input[-1])-1]
+        #1: exp increasing, 2: ), 3:(, 4:increasing, 5: decreasing, 6: cst
         
-    #%%  %%%%%%%%%%%%%%%%%%%%%%%%%
-    #Figures des resultats
-    #####################################    
+        param=(si,hawk,r,sizeDistribution(si)) 
+    
+    
+        sol = ode(func3).set_integrator('lsoda',rtol=0.01)
+        sol.set_initial_value(y0,0).set_f_params(param) #param: doit etre un tableau
+        #sol=odeint(func, y0, temps, args=param) 
+        
+        #res=sol.integrate(10)
+        
+        res1=[] # tableau des resultats
+        timeSet=[] # tableau des temps 
+        while sol.successful() and sol.t < tmax:
+            ss=sol.integrate(sol.t+dt)
+            if sol.t>tmax-365:
+                timeSet.append(sol.t+dt)
+                res1.append(ss)
+        
+        res1=np.transpose(np.array(res1))
+        d = {'Dove & Hawak at t = t_max' : pd.Series(res1[:,-1])}
+        # creates Dataframe.
+        df = pd.DataFrame(d)
+        
+        #-----------------------------------------------------------------------------#
+        #----------------------------         plot          --------------------------#
+        #-----------------------------------------------------------------------------#
+        
+        #st.line_chart(df)
+        st.line_chart(df[df.columns[0]])
+       
+        
+       
+            
+        #%%  %%%%%%%%%%%%%%%%%%%%%%%%%
+        #Figures des resultats
+        #####################################    
+        
+        T, S = np.meshgrid(timeSet, si)
+        
+        fig = plt.figure()
+        #surface_plot without colorbar FIG 1
+        ax = fig.add_subplot(111, projection='3d')
+        
+        
+        
+        surf = ax.plot_surface(S, T, res1, cmap=cm.coolwarm,linewidth=0, antialiased=False)
+        
+        #plt.title('hawk Population Density')
+        plt.xlabel(' s')
+        plt.ylabel(' t')
+        # normalize 0..1
+        #fig.colorbar(surf, shrink=0.5, aspect=5)
+        ax.view_init(70,10)
+        
+        st.pyplot(fig)
+        # #x.set_title(r'\TeX\ is Number $\displaystyle\sum_{n=1}^\infty'
+        # #            r'\frac{-e^{i\pi}}{2^n}$!', fontsize=16, color='r')
+        # ####################
+        
+        # ###################################
+        
+        fig1, ax2 = plt.subplots()
+        CS = ax2.contourf(S, T, res1)#, 10, cmap=plt.cm.bone)
+        
+        #CS2 = ax2.contour(CS, levels=CS.levels[::2], colors='r')
+        
+        plt.xlabel('s',fontsize=12)
+        plt.ylabel('time',fontsize=12)
+        
+        # Make a colorbar for the ContourSet returned by the contourf call.
+        cbar = fig1.colorbar(CS)
+        cbar.ax.set_ylabel(r"$H(t,s)$",fontsize=12)
+        # Add the contour line levels to the colorbar
+        #cbar.add_lines(CS)
+        
+        #plt.savefig('DH3D'+outName+'.pdf', transparent=True)
+        st.pyplot(fig1)
+        
+        
+    
+with column2:
+    if st.button('Run r-effect (distance to random)'):  
+        hawk=Hawk()
+        hawk.Rmax=r_max_input
+        #probability to win parameters
+        hawk.QType=q_input
+        hawk.q_gam=q_gam_input
+        hawk.q_max=q_max_input
+        #Competition parameters
+        hawk.compType=compType
+        hawk.comp_max=comp_max_input
+        hawk.comp_gam=comp_gam_input
+        #size distribution 
+        sizeDistribution_list =[sizeDistribution1,sizeDistribution2, sizeDistribution3, sizeDistribution4, sizeDistribution5, sizeDistribution6]
+        sizeDistribution=sizeDistribution6
+        #sizeDistribution_list[int(sizeDistribution_input[-1])-1]
+        #1: exp increasing, 2: ), 3:(, 4:increasing, 5: decreasing, 6: cst
+        
+        
+        
+        
+        rSet=np.linspace(0,1,10)
+        res2=[]
+        for rr in rSet:
+        
+            param=(si,hawk,rr,sizeDistribution(si)) 
+            sol = ode(func3).set_integrator('lsoda',rtol=0.01)
+            sol.set_initial_value(y0,0).set_f_params(param) #param: doit etre un tableau
+        #sol=odeint(func, y0, temps, args=param) 
+        
+        #res=sol.integrate(10)
+        
+            res1=[] # tableau des resultats
+            timeSet=[] # tableau des temps 
+            while sol.successful() and sol.t < tmax:
+                ss=sol.integrate(sol.t+dt)
+                if sol.t>tmax-365:
+                    timeSet.append(sol.t+dt)
+                    res1.append(ss)
+        
+            res1=np.transpose(np.array(res1))
+        
+            res2.append(res1[:,-1])
+        
+         
+        res2=np.transpose(res2)
+        res2[res2<0]=0
+        
+        #%%  %%%%%%%%%%%%%%%%%%%%%%%%%
+        # Figures des resultats
+        ######################################    
+        
+        T, S = np.meshgrid(rSet, si)
+        
+        fig = plt.figure()
+        #surface_plot without colorbar FIG 1
+        ax = fig.add_subplot(111, projection='3d')
+        
+        
+        
+        surf = ax.plot_surface(S, T, res2, cmap=cm.coolwarm,linewidth=0, antialiased=False)
+        
+        #plt.title('hawk Population Density')
+        plt.xlabel(' s')
+        plt.ylabel(' r')
+        # normalize 0..1
+        #fig.colorbar(surf, shrink=0.5, aspect=5)
+        ax.view_init(70,10)
+        st.pyplot(fig)
+        
+        #x.set_title(r'\TeX\ is Number $\displaystyle\sum_{n=1}^\infty'
+        #            r'\frac{-e^{i\pi}}{2^n}$!', fontsize=16, color='r')
+        ####################
+        
+        ###################################
+        
+        fig1, ax2 = plt.subplots()
+        CS = ax2.contourf(S, T, res2)#, 10, cmap=plt.cm.bone)
+        
+        #CS2 = ax2.contour(CS, levels=CS.levels[::2], colors='r')
+        
+        plt.xlabel('s',fontsize=12)
+        plt.ylabel('r',fontsize=12)
+        
+        # Make a colorbar for the ContourSet returned by the contourf call.
+        cbar = fig1.colorbar(CS)
+        cbar.ax.set_ylabel(r"$H(t,s)$",fontsize=12)
+        
+        # Add the contour line levels to the colorbar
+        #cbar.add_lines(CS)
+        
+        st.pyplot(fig1)
+
+
+
+
+
+
 
 
 
