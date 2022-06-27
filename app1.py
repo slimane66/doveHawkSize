@@ -221,11 +221,11 @@ y0=[float(Hk(s=s)) for s in si]
 APP_TITLE = "Dove-Hawk size dependend"
 st.set_page_config(
     page_title=APP_TITLE,
-    page_icon=Image.open("./utils/logo_bims.png"),
+    #page_icon=Image.open("./utils/logo_bims.png"),
     layout="wide",
     initial_sidebar_state="auto",
 )
-icon = Image.open("./utils/logo_bims.png")
+#icon = Image.open("./utils/logo_bims.png")
 
 #st.set_page_config(layout="wide")  # this needs to be the first Streamlit command called
 
@@ -500,7 +500,7 @@ if st.button('Run The Model'):
     cbar = fig1.colorbar(CS)
     #cbar.ax2.set_ylabel(r"$H(t,s)$",fontsize=12)
     # Add the contour line levels to the colorbar
-    #cbar.add_lines(CS)
+    cbar.add_lines(CS)
     
     #plt.savefig('DH3D'+outName+'.pdf', transparent=True)
     st.pyplot(fig1)
