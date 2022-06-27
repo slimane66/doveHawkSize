@@ -488,7 +488,7 @@ if st.button('Run The Model'):
     # ###################################
     
     fig1, ax2 = plt.subplots()
-    CS = ax2.pcolor(S, T, res1,10,vmin=0, vmax=1)#, 10, cmap=plt.cm.bone)
+    CS = ax2.contourf(S, T, res1,10,vmin=0, vmax=1)#, 10, cmap=plt.cm.bone)
     
     #CS2 = ax2.contour(CS, levels=CS.levels[::2], colors='r')
     
